@@ -3,6 +3,9 @@
 using namespace std;
 int main()
 {
-	System obj;
-	obj.loaddept();
+	cout << "hello world" << endl;
+	System* s = new System;
+	s->viewEmployes();
+	return 0;
+
 }
