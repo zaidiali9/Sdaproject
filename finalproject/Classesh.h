@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include<fstream>
@@ -16,6 +17,48 @@ class assignComplaint;
 class resolvedComplaint;
 class closedComplaint;
 class System;
+class Person {
+private:
+	int pID;
+	string name;
+	string email;
+	string address;
+public:
+	Person(int pid = 0, string name = "", string email = "", string address = "") {
+		this->pID = pid;
+		this->name = name;
+		this->email = email;
+		this->address = address;
+	}
+	virtual void userdetails()
+	{
+		cout << "ID:" << this->pID;
+		cout << "\t" << this->name << endl << endl;
+		cout << "Email: " << this->email << endl;
+		cout << "Address: " << this->address << endl << endl << endl;
+	}
+	int getID();
+	string getName();
+	string getEmail();
+	string getAddress();
+	virtual int getDeptID() {
+		return 0;
+	}
+};
+class Manager : public Person {
+	vector<Job*> jobs; // an array
+	Department* dept;
+public:
+	Manager(int pid = 0, string name = "", string email = "", string address = "") : Person(pid, name, email, address) {
+
+	}
+	void userdetails();
+	int getID();
+	void setDept(Department*& d);
+	Department*& getDept();
+	string getName();
+	int getDeptID();
+};
 class Department {
 	int ID;
 	string name;
@@ -28,51 +71,30 @@ public:
 		this->name = name;
 		this->mgr = m;
 	}
-	string getName();
-	int getID()
-	{
-		return this->ID;
-	}
 	void setManager(Manager* mgr);
+	void setEmployee(Employee*);
+	string getName();
+	int getID();
+	void deptDetails();
+	void deptManager();
+	void deptEmployees();
 };
-class Person {
-protected:
-	int pID;
-	string name;
-	string email;
-	string address;
-public:
-	Person(int pid = 0, string name = "", string email = "", string address = "") {
-		this->pID = pid;
-		this->name = name;
-		this->email = email;
-		this->address = address;
-	}
-	virtual void userdetails() {}
-};
+
 class Employee : public Person {
 	Department* dept;
 	Job* j;
 public:
-	Employee(int pid = 0, string name = "", string email = "", string address = "", Department* dept = nullptr) : Person(pid, name, email, address) {
+	Employee(int pid = 0, string name = "", string email = "", string address = "") : Person(pid, name, email, address) {
 		this->dept = dept;
 		this->j = nullptr;
 	}
 	void userdetails();
+	void userdetail();
+	void setDept(Department*& d);
+	Department*& getDept();
+	int getDeptID();
 };
-class Manager : public Person {
-	vector<Job*> jobs; // an array
-	Department* dept;
-public:
-	Manager(int pid = 0, string name = "", string email = "", string address = "", Department* dept = nullptr) : Person(pid, name, email, address) {
-		this->dept = dept;
-	}
-	void userdetails();
-	int getID()
-	{
-		return dept->getID();
-	}
-};
+
 class Teacher : public Person {
 	Complaint* c;
 public:
@@ -80,7 +102,6 @@ public:
 	{
 		c = c1; // shalllow copy cuz we want to deal with pointers
 	}
-
 };
 class Job {
 	Complaint* c;
@@ -126,18 +147,26 @@ class System {
 public:
 	System() {
 		loaddept();
+		loadManagers();
 		loadEmployess();
-		viewEmployes();
-		cout << "Managers" << endl;
-		loadMangers();
-		viewMangers();
 	}
+	void run();
 	void addPerson(Person* p);
 	void loaddept();
 	void loadEmployess();
-	void loadMangers();
-	void viewEmployes();
+	void loadManagers();
 	void loadTeachers();
-	void viewMangers();
+	void viewManagers();
+	void viewEmployes();
 	void deptManager(Department* d, Manager* m);
-};		
+	void deptEmployee(Department*, Employee*);
+	void getDepartment(Department*& d);
+	Department*& getDepartmentID(int);
+	void deptDetails();
+	void TecherMenu();
+	void ManagerMenu();
+	void EmployeeMenu();
+	void AdminMenu();
+	void Remove(string entity, string filname);
+	void writeFiles(int flag,string filename);
+};

@@ -3,9 +3,7 @@
 using namespace std;
 int main()
 {
-	cout << "hello world" << endl;
 	System* s = new System;
-	s->viewEmployes();
+	s->run();
 	return 0;
-
 }
